@@ -14,10 +14,13 @@ class EmotionsViewController: VCLLoggingViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         var destinationVC = segue.destination
+        
         if let navigationController = destinationVC as? UINavigationController {
             destinationVC = navigationController.visibleViewController ?? destinationVC
         }
+        
         if  let faceViewController = destinationVC as? FaceViewController,
             let identifier = segue.identifier,
             let expression = emotionalFaces[identifier]
