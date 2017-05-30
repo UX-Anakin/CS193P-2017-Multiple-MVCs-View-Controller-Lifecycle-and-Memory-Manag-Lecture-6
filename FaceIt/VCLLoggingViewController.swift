@@ -57,14 +57,18 @@ class VCLLoggingViewController: UIViewController
         logVCL("left the heap")
     }
     
+    /// happens before outlets are set(before the mvc loaded)
     override func awakeFromNib() {
         logVCL("awakeFromNib()")
     }
     
+    /// after instantiation and outlet-setting, viewdidload is called
     override func viewDidLoad() {
         super.viewDidLoad()
+        // do some setup of my MVC
         logVCL("viewDidLoad()")
     }
+    /// Just before your view appears on screen, you get notified
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         logVCL("viewWillAppear(animated = \(animated))")
@@ -77,17 +81,25 @@ class VCLLoggingViewController: UIViewController
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         logVCL("viewWillDisappear(animated = \(animated))")
+        // do some clean up now that we've been removed from the screen
+        // but be careful not to do anything time-consuming here, or app will be sluggish
+        // maybe
+
     }
     
+    /// you get notified when you will disappear off screen
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         logVCL("viewDidDisappear(animated = \(animated))")
     }
+    
+    ///
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         logVCL("didReceiveMemoryWarning()")
     }
     
+    ///  Geometry changed; They are called any time a view's frame changed and its subviews were thus re-layed out
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         logVCL("viewWillLayoutSubviews() bounds.size = \(view.bounds.size)")
@@ -98,6 +110,7 @@ class VCLLoggingViewController: UIViewController
         logVCL("viewDidLayoutSubviews() bounds.size = \(view.bounds.size)")
     }
     
+    ///
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         logVCL("viewWillTransition(to: \(size), with: coordinator)")
@@ -109,3 +122,24 @@ class VCLLoggingViewController: UIViewController
         })
     }
 }
+
+/*
+ 
+ View Controller Lifecycle
+ 
+ Instantiated (from storyboard usually)
+ awakeFromNib
+ segue preparation happens
+ outlets get set
+ viewDidLoad
+ These pairs will be called each time your Controller's view goes on/off screen
+    viewWillAppear and viewDidAppear
+    viewWillDIsappear and viewDidDisappear
+ These "geometry changed" method might be called at any time after viewDidLoad 
+    viewWillLayoutSubviews(... then autolayout happens, then ...) viewDidLayoutSubviews 
+ If memory gets low, you might get ...
+    didReceiveMemoryWarning
+ 
+ 
+ 
+ */
